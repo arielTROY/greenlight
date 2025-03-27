@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.x.x - 2025-xx-xx
+- Add a stream volume control slider to the Gamebar UI (credits to @dylanlanigansmith)
+- Change flags to enable VA-API (credits to @sunshineinabox)
+
 ## v2.3.1 - 2024-04-12
 - Fix xCloud error after login when launching the application in a non xCloud supported country #1193
 
