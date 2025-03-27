@@ -42,9 +42,9 @@ export default class Application {
         this._log = Debug('greenlight')
 
         ElectronApp.commandLine.appendSwitch('use-vulkan')
-        ElectronApp.commandLine.appendSwitch('use-angle', 'vulkan')
+        // ElectronApp.commandLine.appendSwitch('use-angle', 'vulkan')
         ElectronApp.commandLine.appendSwitch('enable-features', 'Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,CanvasOopRasterization')
-        ElectronApp.commandLine.appendSwitch('disable-features', 'UseChromeOSDirectVideoDecoder')
+        // ElectronApp.commandLine.appendSwitch('disable-features', 'UseChromeOSDirectVideoDecoder')
         ElectronApp.commandLine.appendSwitch('enable-gpu-rasterization')
         ElectronApp.commandLine.appendSwitch('enable-oop-rasterization')
         ElectronApp.commandLine.appendSwitch('enable-accelerated-video-decode')
