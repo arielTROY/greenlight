@@ -20,7 +20,7 @@ on:
       
 env:
   node_version: 22
-  reset_cache: ${{ inputs.reset_cache || 'false' }}
+  reset_cache: ${{ inputs.reset_cache || false }}
 
 jobs:
   lint:
@@ -46,7 +46,7 @@ jobs:
           key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-${{ runner.arch }}-npm-
 
-      - name: Reset node_modules cache
+      - name: Reset node_modules cache (if enabled)
         if: env.reset_cache == true
         run: rm -rf node_modules/
 
