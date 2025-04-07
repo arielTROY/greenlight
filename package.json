@@ -47,7 +47,7 @@
     "@types/react": "^18.2.47",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "babel-loader": "^9.1.3",
+    "babel-loader": "^10.0.0",
     "electron": "35",
     "electron-builder": "^26.0.12",
     "eslint": "^8.57.0",
