@@ -2607,10 +2607,10 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-12.0.0.tgz#b929db6df8546080adfd004ab215ed48cf6f2592"
-  integrity sha512-MwVNWlYjDTtOjX5PiD7o5pK0UrFU/OYgcJfjjK4RaHZETNtjJqrZa9Y9ds88+A+f+d5lv+561eZ+yCKoS3gbAA==
+commander@^13.0.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-13.1.0.tgz#776167db68c78f38dcce1f9b8d7b8b9a488abf46"
+  integrity sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==
 
 commander@^2.20.0:
   version "2.20.3"
@@ -4111,10 +4111,10 @@ jest-worker@^27.4.5:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jose@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-5.1.0.tgz#b4dcfa037b3b30ad9d64949b51bc6f173cbd61cf"
-  integrity sha512-H+RVqxA6apaJ0rcQYupKYhos7uosAiF42gUcWZiwhICWMphDULFj/CRr1R0tV/JCv9DEeJaSyYYpc9luHHNT4g==
+jose@^5.10.0:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-5.10.0.tgz#c37346a099d6467c401351a9a0c2161e0f52c4be"
+  integrity sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==
 
 js-sha3@0.8.0:
   version "0.8.0"
@@ -6233,13 +6233,13 @@ ws@^7.4.6:
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.9.tgz#54fa7db29f4c7cec68b1ddd3a89de099942bb591"
   integrity sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==
 
-xal-node@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/xal-node/-/xal-node-1.0.2.tgz#60f4a9039684e00747992a725606eeb9b7133bf2"
-  integrity sha512-Iogs2sw0pm+zdLQ9cFgwNfAB5YKedOZbnMNF4jC4ohOqnTkfO8BZAX7pS7bvV1Y6ZBKkF+CbfjBbgg36d9y7ow==
+xal-node@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/xal-node/-/xal-node-1.1.2.tgz#4b138a247d7316edc0956a46fe7f68e4eb89036c"
+  integrity sha512-xXGxKzCiDCKEjaDIMiOsesgMc0dD+aKSQnVWo2ZnGAKqsTXlq4HjdBqmCcj2xWsea0CZ52vYNhECwgw60oBOGw==
   dependencies:
-    commander "^12.0.0"
-    jose "^5.1.0"
+    commander "^13.0.0"
+    jose "^5.10.0"
     uuid-1345 "^1.0.2"
 
 xbox-webapi@^1.4.2:
