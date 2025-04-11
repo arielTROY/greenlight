@@ -1,7 +1,7 @@
 import { session, dialog } from 'electron'
 import { createWindow } from './helpers'
 import Application from './application'
-import { Xal, TokenStore } from 'xal-node'
+import { Xal } from 'xal-node'
 import AuthTokenStore from './helpers/tokenstore'
 
 
