@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.x.x - 2025-xx-xx
+## v2.3.2 - 2025-04-11
 - Add a stream volume control slider to the Gamebar UI (credits to @dylanlanigansmith)
 - Change flags to enable VA-API (credits to @sunshineinabox)
 
