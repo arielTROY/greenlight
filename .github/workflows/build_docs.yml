@@ -50,19 +50,17 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install npm dependencies
-        working-directory: ./docs
-        run: npm ci
-
-      - name: Build project
-        working-directory: ./docs
-        run: npm run build
+      - name: Install yarn dependencies
+        run: yarn
+  
+      - name: Lint code
+        run: yarn docs build
 
       - name: Upload static files as artifact
         id: deployment-pages
         uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
         with:
-          path: docs/out/
+          path: packages/docs/docs/out/
 
   # Deployment job
   deploy:
