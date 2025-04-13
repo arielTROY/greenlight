@@ -43,8 +43,8 @@ jobs:
         with:
           path: |
             node_modules/
-          key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-${{ runner.arch }}-npm-
+          key: ${{ runner.os }}-${{ runner.arch }}-yarn-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-yarn-
 
       - name: Reset node_modules cache (if enabled)
         if: env.reset_cache == 'true'
@@ -54,10 +54,10 @@ jobs:
         run: yarn
 
       - name: Lint code
-        run: yarn lint
+        run: yarn desktop lint
 
   tests:
-    name: Run playwright tests
+    name: Run tests
     runs-on: ubuntu-latest
     needs: ['lint']
     steps:
@@ -84,7 +84,7 @@ jobs:
         run: yarn
 
       - name: Run tests
-        run: yarn test
+        run: yarn desktop test
 
 
   cachedeps:
@@ -140,7 +140,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: flatpak-sources
-          path: flatpak/
+          path: packages/desktop/flatpak/
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v4.3.0
@@ -161,7 +161,7 @@ jobs:
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
           bundle: greenlight.flatpak
-          manifest-path: flatpak/io.github.unknownskl.greenlight.yml
+          manifest-path: packages/desktop/flatpak/io.github.unknownskl.greenlight.yml
           cache-key: flatpak-builder-${{ github.sha }}
 
       - name: Release flatpak
