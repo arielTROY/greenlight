@@ -3,6 +3,9 @@
 import { HeroUIProvider } from "@heroui/system";
 import { useHref, useNavigate } from "react-router-dom";
 
+import { GamepadNavigationProvider } from './providers/gamepadnav'
+import { TrpcProvider } from './providers/trpc'
+
 // declare module "@react-types/shared" {
 //   interface RouterConfig {
 //     routerOptions: NavigateOptions;
@@ -13,8 +16,12 @@ export function Provider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
   return (
-    <HeroUIProvider navigate={navigate} useHref={useHref}>
-      {children}
-    </HeroUIProvider>
+    <TrpcProvider>
+      <GamepadNavigationProvider>
+        <HeroUIProvider navigate={navigate} useHref={useHref}>
+          {children}
+        </HeroUIProvider>
+      </GamepadNavigationProvider>
+    </TrpcProvider>
   );
 }
