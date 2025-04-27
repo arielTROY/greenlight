@@ -1663,7 +1663,7 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@eslint/eslintrc@^3", "@eslint/eslintrc@^3.3.1":
+"@eslint/eslintrc@^3.3.1":
   version "3.3.1"
   resolved "https://registry.npmjs.org/@eslint/eslintrc/-/eslintrc-3.3.1.tgz"
   integrity sha512-gtF186CXhIl1p4pJNGZw8Yc6RlshoePRvE0X91oPGb3vZ8pM3qOS9W9NGPat9LziaBV7XrJWGylNQXkGcnM3IQ==
@@ -1893,7 +1893,7 @@
     "@react-types/breadcrumbs" "3.7.11"
     "@react-types/shared" "3.28.0"
 
-"@heroui/button@2.2.17", "@heroui/button@^2.2.17":
+"@heroui/button@2.2.17":
   version "2.2.17"
   resolved "https://registry.yarnpkg.com/@heroui/button/-/button-2.2.17.tgz#8d97311e6e8df9bd642b432f053104b94a08d100"
   integrity sha512-hT12p7okVbApxP+7PtnNq9SQ4F8arKOyPOCApESmOkWOBp4HDn6Oy45Dln3jxZqvI0AD7lvsc+qIm1FqcSTWSg==
@@ -2226,7 +2226,7 @@
     "@react-stately/overlays" "3.6.14"
     "@react-types/overlays" "3.8.13"
 
-"@heroui/navbar@2.2.15", "@heroui/navbar@^2.2.15":
+"@heroui/navbar@2.2.15":
   version "2.2.15"
   resolved "https://registry.yarnpkg.com/@heroui/navbar/-/navbar-2.2.15.tgz#a95b1f6023ce732db47a77432660e2546d4a6ca7"
   integrity sha512-N6YxmLzbKQKH+94+DPtiQwp+Ec7fJz3RbvZGuwgBrzvGPtV9KqgFL+EQhvOCkicopOdXRI6PLx4TgT+qfPNk/Q==
@@ -2304,7 +2304,7 @@
     "@react-types/button" "3.11.0"
     "@react-types/overlays" "3.8.13"
 
-"@heroui/progress@2.2.13", "@heroui/progress@^2.2.13":
+"@heroui/progress@2.2.13":
   version "2.2.13"
   resolved "https://registry.yarnpkg.com/@heroui/progress/-/progress-2.2.13.tgz#1d944b31eec487b59349188113092a2760a76a33"
   integrity sha512-jHFfCf+2ernsTextcgWamjfo0nVexxuXZXkX5fNOe3yGRJwOY09wn62QAzJHvG61aCc/u8oPD6S7vcslfYdAMw==
@@ -5409,25 +5409,20 @@
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-2.0.0.tgz"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@trpc/client@^11.1.0":
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-11.1.0.tgz#102ec1f14aa39c4caf5106c51f38a3d4bee293b0"
-  integrity sha512-Q3pL4p7AddxI/ZJTEFo1utKSdasDFjZPECIPsKDkthEt52k530JkYVltTdLkYFKrNWXKKBo8MN7NwchelczoRw==
-
-"@trpc/react-query@^11.1.0":
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/@trpc/react-query/-/react-query-11.1.0.tgz#75a023d4b58ca12160e76a800127519f0680263c"
-  integrity sha512-qdqKdFM8hVy/YSBCg1/3VO+IgB6Nbul3Fk1SA3lefGf0bkYZdWVVyKab8HBAfOWlMsuRufhVLPdKYmnjzBrK9g==
+"@trpc/client@^11.1.1":
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-11.1.1.tgz#6b9b7b824d607a5f2787685660a80da8290aa3ba"
+  integrity sha512-Beiv56hlt+ARbijtUsCQOvKJw/FkfuVk4W9TzJl285iIJw8iCA3ZTwTG9GjIeSgeR7d2MyOeUbI26LV255n33A==
 
 "@trpc/server@^11.1.0":
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/@trpc/server/-/server-11.1.0.tgz#8169fa8b944beddf65a95f376d4afea5732be254"
   integrity sha512-uAJ7ikejeujVkf53XFJ/0W8nr7bDjul+Szk5Rsepq97Hb/WS1RkRXdyX4KqAyCE9b1vDFCJVJwSxiIZdRtbTZQ==
 
-"@trpc/tanstack-react-query@^11.1.0":
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/@trpc/tanstack-react-query/-/tanstack-react-query-11.1.0.tgz#e0969cdfa636c02c1d9adb820fa2e6264f55eba9"
-  integrity sha512-BRK5QWKAVHqvDyqjnGYp+53sgb5xE3MB1+fxrBKylVR1lFEeFQvUHwwY3Dtr/Pcq0mmxALytCsBVEGTiQCHnEw==
+"@trpc/tanstack-react-query@^11.1.1":
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/@trpc/tanstack-react-query/-/tanstack-react-query-11.1.1.tgz#38e281968560116b4da4ea96b728d863e7976469"
+  integrity sha512-yLEGAixJk4f4epjuilhO2wZV/u6/Gwl0rjTep1C71HcLB09kJdphACf2c8z2fGnKpAbMDSlg3YXzR92eItkR4w==
 
 "@ts-morph/common@~0.26.0":
   version "0.26.1"
@@ -5632,7 +5627,7 @@
   resolved "https://registry.npmjs.org/@types/ms/-/ms-2.1.0.tgz"
   integrity sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==
 
-"@types/node@*", "@types/node@22.14.1", "@types/node@^22", "@types/node@^22.14.1", "@types/node@^22.7.7":
+"@types/node@*", "@types/node@22.14.1", "@types/node@^22.14.1", "@types/node@^22.7.7":
   version "22.14.1"
   resolved "https://registry.npmjs.org/@types/node/-/node-22.14.1.tgz"
   integrity sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==
@@ -5664,7 +5659,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-dom@^18", "@types/react-dom@^18.3.6":
+"@types/react-dom@^18.3.6":
   version "18.3.6"
   resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.3.6.tgz"
   integrity sha512-nf22//wEbKXusP6E9pfOCDwFdHAX4u172eaJI4YkDRQEZiorm6KfYnSC2SWLDMVWUOWPERmJnN0ujeAfTBLvrw==
@@ -5684,7 +5679,7 @@
     "@types/prop-types" "*"
     csstype "^3.0.2"
 
-"@types/react@^18", "@types/react@^18.2.47", "@types/react@^18.3.20":
+"@types/react@^18.2.47", "@types/react@^18.3.20":
   version "18.3.20"
   resolved "https://registry.npmjs.org/@types/react/-/react-18.3.20.tgz"
   integrity sha512-IPaCZN7PShZK/3t6Q87pfTkRm6oLTd4vztyoj+cbHUF1g3FfVb2tFIL79uCRKEfv16AhqDMBywP2VW3KIZUvcg==
@@ -8257,7 +8252,7 @@ escape-string-regexp@^5.0.0:
   resolved "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-5.0.0.tgz"
   integrity sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==
 
-eslint-config-next@15.3.0, eslint-config-next@^15.2.4:
+eslint-config-next@^15.2.4:
   version "15.3.0"
   resolved "https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-15.3.0.tgz"
   integrity sha512-+Z3M1W9MnJjX3W4vI9CHfKlEyhTWOUHvc5dB89FyRnzPsUkJlLWZOi8+1pInuVcSztSM4MwBFB0hIHf4Rbwu4g==
@@ -9059,15 +9054,6 @@ framer-motion@11.15.0:
   dependencies:
     motion-dom "^11.14.3"
     motion-utils "^11.14.3"
-    tslib "^2.4.0"
-
-framer-motion@^12.7.4:
-  version "12.7.4"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-12.7.4.tgz#50aeb8b5b5a672dea931bdb74956d7b526bf0b4b"
-  integrity sha512-jX0bPsTmU0oPZTYz/dVyD0dmOyEOEJvdn0TaZBE5I8g2GvVnnQnW9f65cJnoVfUkY3WZWNXGXnPbVA9YnaIfVA==
-  dependencies:
-    motion-dom "^12.7.4"
-    motion-utils "^12.7.2"
     tslib "^2.4.0"
 
 fresh@0.5.2:
@@ -11601,22 +11587,10 @@ motion-dom@^11.14.3:
   dependencies:
     motion-utils "^11.18.1"
 
-motion-dom@^12.7.4:
-  version "12.7.4"
-  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-12.7.4.tgz#80f5f8d706e94bc29f6f4f4afa300ff9e1f976a2"
-  integrity sha512-1ZUHAoSUMMxP6jPqyxlk9XUfb6NxMsnWPnH2YGhrOhTURLcXWbETi6eemoKb60Pe32NVJYduL4B62VQSO5Jq8Q==
-  dependencies:
-    motion-utils "^12.7.2"
-
 motion-utils@^11.14.3, motion-utils@^11.18.1:
   version "11.18.1"
   resolved "https://registry.yarnpkg.com/motion-utils/-/motion-utils-11.18.1.tgz#671227669833e991c55813cf337899f41327db5b"
   integrity sha512-49Kt+HKjtbJKLtgO/LKj9Ld+6vw9BjH5d9sc40R/kVyH8GLAXgT42M2NnuPcJNuA3s9ZfZBUcwIgpmZWGEE+hA==
-
-motion-utils@^12.7.2:
-  version "12.7.2"
-  resolved "https://registry.yarnpkg.com/motion-utils/-/motion-utils-12.7.2.tgz#99b673d8851583b325bd0c8b0f04c5bf42b9b818"
-  integrity sha512-XhZwqctxyJs89oX00zn3OGCuIIpVevbTa+u82usWBC6pSHUd2AoNWiYa7Du8tJxJy9TFbZ82pcn5t7NOm1PHAw==
 
 ms@2.0.0:
   version "2.0.0"
@@ -11698,7 +11672,7 @@ next-themes@^0.4.6:
   resolved "https://registry.npmjs.org/next-themes/-/next-themes-0.4.6.tgz"
   integrity sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==
 
-next@15.3.0, next@^15.1.5, next@^15.2.4:
+next@^15.1.5, next@^15.2.4:
   version "15.3.0"
   resolved "https://registry.npmjs.org/next/-/next-15.3.0.tgz"
   integrity sha512-k0MgP6BsK8cZ73wRjMazl2y2UcXj49ZXLDEgx6BikWuby/CN+nh81qFFI16edgd7xYpe/jj2OZEIwCoqnzz0bQ==
@@ -14197,7 +14171,7 @@ typescript@5.6.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.6.3.tgz#5f3449e31c9d94febb17de03cc081dd56d81db5b"
   integrity sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==
 
-typescript@^5, typescript@^5.4.3, typescript@^5.8.3:
+typescript@^5.4.3, typescript@^5.8.3:
   version "5.8.3"
   resolved "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz"
   integrity sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==

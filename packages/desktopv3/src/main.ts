@@ -23,7 +23,7 @@ const createWindow = () => {
       },
     })
 
-    win.loadURL('file://web/');
+    win.loadURL('http://web/');
 }
 
 app.on('window-all-closed', () => {
@@ -32,7 +32,7 @@ app.on('window-all-closed', () => {
 
 app.whenReady().then(async () => {
 
-    await protocol.handle('file', async (request:any) => {
+    await protocol.handle('http', async (request:any) => {
       const url = new URL(request.url);
       console.log('Loading file: ', url.pathname);
       const filePath = path.join(__dirname, 'web', url.pathname);

@@ -7,9 +7,8 @@
     "start": "yarn build && electron-forge start",
     "dev": "yarn build && electron-forge start",
     "build": "rm -rf dist/ && webpack -c ./webpack.config.ts && cp -r web dist/",
-    "build:deps": "cd ../../ && yarn logger build && yarn platform build && yarn server build && yarn desktopv3 build:web2",
+    "build:deps": "cd ../../ && yarn logger build && yarn platform build && yarn server build && yarn desktopv3 build:web",
     "build:web": "cd ../../ && rm -rf packages/desktopv3/web && yarn web build && cp -r packages/web/dist packages/desktopv3/web",
-    "build:web2": "cd ../../ && rm -rf packages/desktopv3/web && yarn web2 build && cp -r packages/web2/dist packages/desktopv3/web",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "yarn build && electron-forge package",
     "make": "yarn build && electron-forge make"

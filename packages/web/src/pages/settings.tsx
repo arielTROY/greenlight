@@ -1,26 +1,14 @@
-'use client';
+import { title } from "@/components/primitives";
+import DefaultLayout from "@/layouts/default";
 
-import { useEffect, useState } from "react";
-
-import Head from "next/head";
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
-import styles from "../styles/Home.module.css";
-
-import Logger from '@greenlight/logger'
-
-import { trpcReact } from './_app'
-
-export default function Settings() {
-
+export default function SettingsPage() {
   return (
-    <>
-      <Head>
-        <title>Greenlight - Settings</title>
-      </Head>
-      <div>
-        Settings...
-      </div>
-    </>
+    <DefaultLayout>
+      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+        <div className="inline-block max-w-lg text-center justify-center">
+          <h1 className={title()}>Pricing</h1>
+        </div>
+      </section>
+    </DefaultLayout>
   );
 }
