@@ -43,7 +43,7 @@
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.25.0",
+    "@eslint/js": "^9.25.1",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@next/eslint-plugin-next": "^15.3.1",
     "@types/node": "^22.14.1",
