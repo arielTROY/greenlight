@@ -48,9 +48,17 @@ Make sure this file exists and is executable:
 chmod +x /path/to/greenlight/greenlight-bin/opt/Greenlight/greenlight
 ```
 
-## Step 5: Update the Launch Script (if needed)
+## Step 5: Verify the Launch Script Path
 
-The `greenlight.sh` script is configured to look for the Greenlight executable in the `greenlight-bin/opt/Greenlight/` directory. If your extracted files have a different path structure, you may need to update the script.
+The `greenlight.sh` script is configured to look for the Greenlight executable at:
+```
+greenlight-bin/opt/Greenlight/greenlight
+```
+
+If your extracted files have a different path structure, you'll need to update the script. The relevant line in `greenlight.sh` is:
+```bash
+"$WESTONPACK_RUNTIME/start.sh" "$SCRIPT_DIR/greenlight-bin/opt/Greenlight/greenlight"
+```
 
 ## Directory Structure
 
