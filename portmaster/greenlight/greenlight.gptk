@@ -1,0 +1,42 @@
+# Greenlight gptokeyb configuration
+
+# Keyboard mapping based on the README.md
+# Dpad: Keypad direction controls
+# Buttons: A, B, X, Y, Backspace (Mapped as B), Enter (Mapped as A)
+# Nexus (Xbox button): N
+# Left Bumper: [
+# Right Bumper: ]
+# Left Trigger: -
+# Right Trigger: =
+# View: V
+# Menu: M
+
+back = \"escape\"
+start = \"m\"
+guide = \"n\"
+
+a = \"a\"
+b = \"b\"
+x = \"x\"
+y = \"y\"
+
+up = \"up\"
+down = \"down\"
+left = \"left\"
+right = \"right\"
+
+l1 = \"[\"
+l2 = \"-\"
+r1 = \"]\"
+r2 = \"=\"
+
+l3 = \"v\"
+r3 = \"~\"
+
+# Special key combinations
+# Start + Select to quit
+deadzone_y = 8000
+deadzone_x = 8000
+
+# Quit combo (Select+Start)
+quit = \"back+start\"

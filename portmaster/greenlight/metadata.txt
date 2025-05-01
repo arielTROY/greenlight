@@ -1,0 +1,7 @@
+name="Greenlight"
+year="2023"
+porter="OpenHands"
+url="https://github.com/unknownskl/greenlight"
+desc="Open-source client for Xbox Cloud Gaming (xCloud) and Xbox home streaming"
+genres="streaming"
+runtime="westonpack"
