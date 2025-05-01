@@ -301,6 +301,38 @@ if [ $GBM_FOUND -eq 0 ]; then
     fi
 fi
 
+# Create a stub library for the missing gbm_bo_get_modifier symbol
+# This is a workaround for the "undefined symbol: gbm_bo_get_modifier" error
+echo "Creating stub library for GBM..."
+mkdir -p "$SCRIPT_DIR/libs/stubs"
+
+# Create a C file with the missing symbol
+cat > "$SCRIPT_DIR/libs/stubs/gbm_stub.c" << 'EOF'
+#include <stdint.h>
+#include <stddef.h>
+
+// Stub implementation of the missing function
+uint64_t gbm_bo_get_modifier(void *bo) {
+    // Return a default value that should be safe
+    return 0;
+}
+EOF
+
+# Try to compile the stub library if gcc is available
+if command -v gcc >/dev/null 2>&1; then
+    echo "Compiling GBM stub library..."
+    gcc -shared -fPIC "$SCRIPT_DIR/libs/stubs/gbm_stub.c" -o "$SCRIPT_DIR/libs/stubs/libgbm_stub.so"
+    if [ -f "$SCRIPT_DIR/libs/stubs/libgbm_stub.so" ]; then
+        echo "Successfully created GBM stub library"
+        # Add the stub library to LD_PRELOAD to override the missing symbol
+        export LD_PRELOAD="$SCRIPT_DIR/libs/stubs/libgbm_stub.so:$LD_PRELOAD"
+    else
+        echo "Failed to compile GBM stub library"
+    fi
+else
+    echo "gcc not found, cannot create GBM stub library"
+fi
+
 # Add system graphics libraries to path
 for lib_path in "/usr/lib/aarch64-linux-gnu" "/usr/lib/arm-linux-gnueabihf" "/usr/lib/mesa" "/usr/lib/mesa-egl"; do
     if [ -d "$lib_path" ]; then
@@ -351,23 +383,55 @@ if [ "$DIRECT_X11" = "1" ]; then
     export GDK_BACKEND=x11
     export QT_QPA_PLATFORM=xcb
     export SDL_VIDEODRIVER=x11
-    export ELECTRON_DISABLE_GPU=1  # Try disabling GPU acceleration if there are issues
+    
+    # Disable GPU acceleration completely for Electron
+    export ELECTRON_DISABLE_GPU=1
+    export ELECTRON_NO_ASAR=1
+    export ELECTRON_NO_ATTACH_CONSOLE=1
+    export ELECTRON_ENABLE_LOGGING=1
+    
+    # Disable hardware acceleration
+    export DISABLE_GPU=1
+    export DISABLE_DIRECTWRITE=1
+    export DISABLE_PEPPER_3D=1
+    export DISABLE_GPU_COMPOSITING=1
+    export DISABLE_GPU_RASTERIZATION=1
+    export DISABLE_GPU_SANDBOX=1
     
     # Add Greenlight binary directory to library path
     export LD_LIBRARY_PATH="$GREENLIGHT_DIR:$GREENLIGHT_DIR/lib:$LD_LIBRARY_PATH"
     
-    # Launch directly
+    # Launch directly with all GPU acceleration disabled
     cd "$GREENLIGHT_DIR"
     if [ $DEBUG_MODE -eq 1 ]; then
-        echo "Launching greenlight with verbose mode..."
-        ./greenlight --verbose --no-sandbox
+        echo "Launching greenlight with verbose mode and GPU acceleration disabled..."
+        ./greenlight --verbose --no-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-gpu-compositing --disable-gpu-rasterization
     else
-        ./greenlight --no-sandbox
+        ./greenlight --no-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-gpu-compositing --disable-gpu-rasterization
     fi
 else
     # Westonpack mode
+    
+    # Disable GPU acceleration completely for Electron
+    export ELECTRON_DISABLE_GPU=1
+    export ELECTRON_NO_ASAR=1
+    export ELECTRON_NO_ATTACH_CONSOLE=1
+    export ELECTRON_ENABLE_LOGGING=1
+    
+    # Disable hardware acceleration
+    export DISABLE_GPU=1
+    export DISABLE_DIRECTWRITE=1
+    export DISABLE_PEPPER_3D=1
+    export DISABLE_GPU_COMPOSITING=1
+    export DISABLE_GPU_RASTERIZATION=1
+    export DISABLE_GPU_SANDBOX=1
+    
+    # Set GPU disable flags for Greenlight
+    GREENLIGHT_FLAGS="--no-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-gpu-compositing --disable-gpu-rasterization"
+    
     if [ $DEBUG_MODE -eq 1 ]; then
         echo "Launching with runtime launcher: $WESTONPACK_LAUNCHER"
+        GREENLIGHT_FLAGS="$GREENLIGHT_FLAGS --verbose"
         
         # Check if the launcher script exists and is executable
         if [ ! -f "$WESTONPACK_LAUNCHER" ]; then
@@ -380,21 +444,23 @@ else
             export GDK_BACKEND=x11
             export QT_QPA_PLATFORM=xcb
             export SDL_VIDEODRIVER=x11
-            export ELECTRON_DISABLE_GPU=1
             
             # Launch directly
             cd "$GREENLIGHT_DIR"
-            ./greenlight --verbose --no-sandbox
+            echo "Launching with flags: $GREENLIGHT_FLAGS"
+            ./greenlight $GREENLIGHT_FLAGS
         elif [ ! -x "$WESTONPACK_LAUNCHER" ]; then
             echo "Error: Launcher script $WESTONPACK_LAUNCHER is not executable!"
             echo "Making it executable..."
             chmod +x "$WESTONPACK_LAUNCHER"
             
             # Try to launch with the now-executable script
-            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" --verbose --no-sandbox
+            echo "Launching with flags: $GREENLIGHT_FLAGS"
+            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" $GREENLIGHT_FLAGS
         else
             # Launch with the detected launcher script
-            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" --verbose --no-sandbox
+            echo "Launching with flags: $GREENLIGHT_FLAGS"
+            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" $GREENLIGHT_FLAGS
         fi
     else
         # Check if the launcher script exists and is executable
@@ -406,21 +472,20 @@ else
             export GDK_BACKEND=x11
             export QT_QPA_PLATFORM=xcb
             export SDL_VIDEODRIVER=x11
-            export ELECTRON_DISABLE_GPU=1
             
             # Launch directly
             cd "$GREENLIGHT_DIR"
-            ./greenlight --no-sandbox
+            ./greenlight $GREENLIGHT_FLAGS
         elif [ ! -x "$WESTONPACK_LAUNCHER" ]; then
             echo "Error: Launcher script $WESTONPACK_LAUNCHER is not executable!"
             echo "Making it executable..."
             chmod +x "$WESTONPACK_LAUNCHER"
             
             # Try to launch with the now-executable script
-            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" --no-sandbox
+            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" $GREENLIGHT_FLAGS
         else
             # Launch with the detected launcher script
-            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" --no-sandbox
+            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" $GREENLIGHT_FLAGS
         fi
     fi
 fi
