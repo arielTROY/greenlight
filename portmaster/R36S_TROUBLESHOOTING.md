@@ -1,122 +1,182 @@
-# R36S Specific Troubleshooting for Greenlight
+# R36S Troubleshooting Guide for Greenlight
 
-This guide provides specific troubleshooting steps for running Greenlight on the Anbernic R36S device.
+This guide provides solutions for common issues when running Greenlight on the Anbernic R36S device.
 
-## Common R36S Issues
+## Issue: "Cannot find Westonpack"
 
-### Black Screen Blinking and Returning to Main Menu
+### Solution 1: Install Westonpack
 
-If Greenlight starts but immediately shows a black screen that blinks twice before returning to the main menu, try these R36S-specific fixes:
+Follow the instructions in the `WESTONPACK_INSTALLATION.md` file to install Westonpack on your R36S.
 
-## 1. Check for Missing Libraries
+### Solution 2: Use the Alternative Launch Script
 
-The R36S may be missing some libraries required by Greenlight. Check the debug log at `/tmp/greenlight_debug.log` after attempting to run the app.
+If you cannot install Westonpack, use the alternative launch script:
 
-Common missing libraries on R36S include:
-- libvulkan.so.1
-- libEGL.so.1
-- libGLESv2.so.2
-- libxcb.so.1
-
-### Solution:
-
-Create a `libs` directory in your port folder and copy the missing libraries from your system:
-
-```bash
-# On your Linux PC, find the libraries
-find /usr/lib -name "libvulkan.so.1"
-find /usr/lib -name "libEGL.so.1"
-# etc.
-
-# Copy them to a USB drive, then to your R36S in the port's libs directory
-mkdir -p /path/to/portmaster/ports/greenlight/libs
-cp /path/from/usb/lib*.so* /path/to/portmaster/ports/greenlight/libs/
-```
-
-## 2. Try Alternative Display Settings
-
-The R36S may need different display settings. Edit the `greenlight.sh` script and try these alternatives:
-
-```bash
-# Try these different display settings one at a time
-export DISPLAY=:1
-# or
-export SDL_VIDEODRIVER=wayland
-# or
-export SDL_VIDEODRIVER=kms
-# or
-export QT_QPA_PLATFORM=wayland
-```
-
-## 3. Check Westonpack Configuration
-
-Make sure Westonpack is properly configured on your R36S:
-
-1. Go to Portmaster settings
-2. Check that Westonpack runtime is installed and up to date
-3. Try reinstalling Westonpack if necessary
-
-## 4. Memory Management
-
-The R36S has limited RAM. Before launching Greenlight:
-
-1. Close all other applications
-2. Restart your device to clear memory
-3. Edit `greenlight.sh` to add memory optimization:
-
-```bash
-# Add before launching Greenlight
-sync
-echo 3 > /proc/sys/vm/drop_caches  # Requires root
-```
-
-## 5. GPU Driver Issues
-
-The R36S uses Mali GPU which may have compatibility issues with Greenlight:
-
-1. Check your GPU driver in the debug log
-2. Try updating your R36S firmware to the latest version
-3. If using a custom firmware, ensure it has proper GPU drivers
-
-## 6. Try Different Greenlight Version
-
-If the latest version doesn't work, try an older version:
-
-1. Download an older version of Greenlight for Linux
-2. Replace the binary in the `greenlight-bin` directory
-3. Make sure to set executable permissions:
+1. Rename the original script:
    ```bash
-   chmod +x /path/to/portmaster/ports/greenlight/greenlight-bin/opt/Greenlight/greenlight
+   mv greenlight.sh greenlight.sh.original
    ```
 
-## 7. Check Resource Usage
-
-If Greenlight is crashing due to resource limitations:
-
-1. Edit `greenlight.sh` to monitor resource usage:
+2. Copy the alternative script:
    ```bash
-   # Add before launching Greenlight
-   echo "CPU usage:"
-   top -n 1 -b | head -n 20
-   echo "Memory usage:"
-   free -m
+   cp greenlight-alt.sh greenlight.sh
    ```
 
-2. Check the log after a crash to see if you're running out of resources
+3. Make it executable:
+   ```bash
+   chmod +x greenlight.sh
+   ```
 
-## 8. File a Detailed Bug Report
+## Issue: Black Screen or Crash on Launch
 
-If you still can't get Greenlight working on your R36S:
+### Solution 1: Check X11 Configuration
 
-1. Collect the debug log from `/tmp/greenlight_debug.log`
-2. Note your R36S firmware version and any modifications
-3. Describe the exact behavior (black screen, crash, etc.)
-4. Submit this information to help improve compatibility
+The R36S may need specific X11 configuration:
 
-## Additional R36S Tips
+1. SSH into your R36S:
+   ```bash
+   ssh root@[your-r36s-ip]
+   ```
 
-- The R36S performs best with lightweight applications
-- Make sure your device is not overheating during use
-- Consider using a cooling fan if available
-- Keep your R36S firmware updated to the latest version
-- Some users report better results with custom firmware like JELOS
+2. Check if X11 is running:
+   ```bash
+   ps aux | grep X
+   ```
+
+3. If X11 is not running, start it:
+   ```bash
+   startx &
+   ```
+
+### Solution 2: Check Graphics Libraries
+
+Greenlight requires specific graphics libraries:
+
+1. Install required libraries:
+   ```bash
+   apt update
+   apt install libgl1 libvulkan1 libegl1 libxkbcommon0
+   ```
+
+### Solution 3: Run in Compatibility Mode
+
+Add these environment variables to the launch script:
+
+```bash
+export LIBGL_ALWAYS_SOFTWARE=1
+export MESA_GL_VERSION_OVERRIDE=3.3
+```
+
+## Issue: No Controller Input
+
+### Solution 1: Check gptokeyb
+
+1. Make sure gptokeyb is installed:
+   ```bash
+   ls -la /opt/system/Tools/PortMaster/helper/gptokeyb
+   ```
+
+2. If missing, download it:
+   ```bash
+   wget -O /opt/system/Tools/PortMaster/helper/gptokeyb https://github.com/PortsMaster/PortMaster-Helper/raw/main/gptokeyb
+   chmod +x /opt/system/Tools/PortMaster/helper/gptokeyb
+   ```
+
+### Solution 2: Update Controller Mapping
+
+If your controller isn't working correctly:
+
+1. Edit the `greenlight.gptk` file
+2. Update the button mappings to match your controller
+3. Save and try again
+
+## Issue: Performance Problems
+
+### Solution 1: Lower Resolution
+
+Edit the launch script to add these environment variables:
+
+```bash
+export GDK_SCALE=0.75
+export QT_SCALE_FACTOR=0.75
+```
+
+### Solution 2: Disable Effects
+
+Add these environment variables:
+
+```bash
+export GREENLIGHT_DISABLE_EFFECTS=1
+export GREENLIGHT_LOW_PERFORMANCE=1
+```
+
+## Issue: Network Connection Problems
+
+### Solution 1: Check WiFi
+
+1. Make sure your R36S is connected to WiFi
+2. Test the connection:
+   ```bash
+   ping -c 3 xbox.com
+   ```
+
+### Solution 2: Update DNS
+
+If you have connection issues:
+
+1. Edit `/etc/resolv.conf`
+2. Add these lines:
+   ```
+   nameserver 1.1.1.1
+   nameserver 8.8.8.8
+   ```
+
+## Issue: Audio Problems
+
+### Solution 1: Check Audio Device
+
+1. List audio devices:
+   ```bash
+   aplay -l
+   ```
+
+2. Set the correct audio device:
+   ```bash
+   export ALSA_CARD=0
+   export ALSA_PCM_CARD=0
+   ```
+
+### Solution 2: Fix PulseAudio
+
+If using PulseAudio:
+
+1. Restart PulseAudio:
+   ```bash
+   pulseaudio -k
+   pulseaudio --start
+   ```
+
+## Getting Logs for Debugging
+
+If you need to troubleshoot further:
+
+1. Modify the launch script to save logs:
+   ```bash
+   ./greenlight "$@" > /tmp/greenlight.log 2>&1
+   ```
+
+2. Check the logs:
+   ```bash
+   cat /tmp/greenlight.log
+   ```
+
+3. Share these logs when asking for help
+
+## Contact for Support
+
+If you continue to have issues, please:
+
+1. Create an issue on the GitHub repository
+2. Include your R36S model and firmware version
+3. Attach any error logs
+4. Describe the steps you've already tried
