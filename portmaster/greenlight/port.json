@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "name": "greenlight.zip",
+  "items": [
+    "greenlight/",
+    "greenlight/greenlight.sh",
+    "greenlight/greenlight.gptk",
+    "greenlight/greenlight-bin",
+    "greenlight/libs/"
+  ],
+  "items_opt": [],
+  "attr": {
+    "title": "Greenlight",
+    "desc": "Open-source client for Xbox Cloud Gaming (xCloud) and Xbox home streaming",
+    "inst": "Download the latest release of Greenlight from https://github.com/unknownskl/greenlight/releases and extract the Linux x64 version. Copy the extracted files to the greenlight-bin directory. Requires Westonpack runtime.",
+    "genres": [
+      "streaming"
+    ],
+    "porter": [
+      "OpenHands"
+    ],
+    "image": "greenlight.jpg",
+    "rtr": true,
+    "runtime": "westonpack",
+    "reqs": []
+  }
+}
