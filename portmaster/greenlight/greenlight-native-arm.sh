@@ -28,7 +28,29 @@ fi
 
 # Set up environment variables
 export PORTMASTER="$SCRIPT_DIR"
-export PORTMASTER_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
+
+# Try to detect the Portmaster directory structure
+# First check if we're in the standard Portmaster structure
+if [ -d "$(dirname "$(dirname "$SCRIPT_DIR")")/runtime" ]; then
+    export PORTMASTER_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
+    echo "Found standard Portmaster directory structure: $PORTMASTER_DIR"
+else
+    # Check common Portmaster locations
+    for pm_dir in "/storage/roms/ports/PortMaster" "/roms/ports/PortMaster" "/opt/system/Tools/PortMaster" "/userdata/system/portmaster"; do
+        if [ -d "$pm_dir" ]; then
+            export PORTMASTER_DIR="$pm_dir"
+            echo "Found Portmaster at: $PORTMASTER_DIR"
+            break
+        fi
+    done
+    
+    # If still not found, use a default
+    if [ -z "$PORTMASTER_DIR" ]; then
+        export PORTMASTER_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
+        echo "Using default Portmaster directory: $PORTMASTER_DIR"
+    fi
+fi
+
 export GREENLIGHT_DIR="$SCRIPT_DIR/greenlight-bin"
 
 # Check if the ARM binary exists
@@ -49,26 +71,53 @@ fi
 
 # Check for Westonpack in multiple possible locations
 WESTONPACK_PATHS=(
+    # Standard Portmaster paths
     "$PORTMASTER_DIR/runtime/westonpack"
     "/opt/system/Tools/PortMaster/runtime/westonpack"
     "/roms/ports/runtime/westonpack"
     "/roms/tools/PortMaster/runtime/westonpack"
     "/userdata/system/portmaster/runtime/westonpack"
+    # Additional Portmaster paths
+    "/storage/.config/PortMaster/runtime/westonpack"
+    "/storage/roms/ports/PortMaster/runtime/westonpack"
+    "/storage/roms/tools/PortMaster/runtime/westonpack"
+    "/storage/roms/ports/PortMaster/runtime/weston"
+    # System paths
     "/opt/westonpack"
     "/usr/share/westonpack"
     "/storage/roms/ports/westonpack"
     "/opt/system/westonpack"
+    # Generic weston paths
+    "/opt/weston"
+    "/usr/share/weston"
+    "/storage/roms/ports/weston"
+    "/opt/system/weston"
 )
+
+# Debug: List all possible Westonpack paths
+if [ $DEBUG_MODE -eq 1 ]; then
+    echo "Searching for Westonpack in the following locations:"
+    for path in "${WESTONPACK_PATHS[@]}"; do
+        echo "  - $path"
+    done
+fi
 
 WESTONPACK_FOUND=0
 for path in "${WESTONPACK_PATHS[@]}"; do
     if [ -d "$path" ]; then
-        export WESTONPACK_RUNTIME="$path"
-        WESTONPACK_FOUND=1
-        if [ $DEBUG_MODE -eq 1 ]; then
-            echo "Found Westonpack at: $WESTONPACK_RUNTIME"
+        if [ -f "$path/start.sh" ]; then
+            export WESTONPACK_RUNTIME="$path"
+            WESTONPACK_FOUND=1
+            if [ $DEBUG_MODE -eq 1 ]; then
+                echo "Found Westonpack at: $WESTONPACK_RUNTIME"
+                echo "Westonpack start.sh exists: $(ls -la $path/start.sh)"
+            fi
+            break
+        else
+            if [ $DEBUG_MODE -eq 1 ]; then
+                echo "Found directory $path but no start.sh script"
+            fi
         fi
-        break
     fi
 done
 
@@ -78,7 +127,7 @@ if [ $WESTONPACK_FOUND -eq 0 ]; then
     echo "Checking for alternative runtimes..."
     
     # Try to find any X11 or Wayland runtime
-    for runtime_dir in "$PORTMASTER_DIR/runtime/"* "/opt/system/Tools/PortMaster/runtime/"* "/roms/ports/runtime/"*; do
+    for runtime_dir in "$PORTMASTER_DIR/runtime/"* "/opt/system/Tools/PortMaster/runtime/"* "/roms/ports/runtime/"* "/storage/roms/ports/PortMaster/runtime/"*; do
         if [ -d "$runtime_dir" ] && [ -f "$runtime_dir/start.sh" ]; then
             export WESTONPACK_RUNTIME="$runtime_dir"
             WESTONPACK_FOUND=1
@@ -162,6 +211,84 @@ if [ $DEBUG_MODE -eq 1 ]; then
     echo "Starting Greenlight Native ARM with Westonpack..."
 fi
 
+# Check for GBM libraries to fix "undefined symbol: gbm_bo_get_modifier" error
+GBM_PATHS=(
+    "/usr/lib/aarch64-linux-gnu"
+    "/usr/lib/arm-linux-gnueabihf"
+    "/lib/aarch64-linux-gnu"
+    "/lib/arm-linux-gnueabihf"
+    "/usr/lib"
+    "/lib"
+)
+
+GBM_FOUND=0
+for path in "${GBM_PATHS[@]}"; do
+    if [ -d "$path" ] && ([ -f "$path/libgbm.so.1" ] || [ -f "$path/libgbm.so" ]); then
+        if [ $DEBUG_MODE -eq 1 ]; then
+            echo "Found GBM library at: $path"
+            ls -la $path/libgbm*
+        fi
+        export LD_LIBRARY_PATH="$path:$LD_LIBRARY_PATH"
+        GBM_FOUND=1
+    fi
+done
+
+# Create a local libs directory and symlink GBM if not found
+if [ $GBM_FOUND -eq 0 ]; then
+    echo "GBM library not found in standard locations. Checking for alternative libraries..."
+    
+    # Create a local libs directory if it doesn't exist
+    mkdir -p "$SCRIPT_DIR/libs"
+    
+    # Try to find any GBM library on the system
+    GBM_LIB=$(find /usr -name "libgbm.so*" | head -n 1)
+    if [ -n "$GBM_LIB" ]; then
+        echo "Found GBM library at: $GBM_LIB"
+        ln -sf "$GBM_LIB" "$SCRIPT_DIR/libs/libgbm.so.1"
+        echo "Created symlink to GBM library in $SCRIPT_DIR/libs"
+        export LD_LIBRARY_PATH="$SCRIPT_DIR/libs:$LD_LIBRARY_PATH"
+    else
+        echo "Warning: Could not find GBM library on the system"
+    fi
+fi
+
+# Add system graphics libraries to path
+for lib_path in "/usr/lib/aarch64-linux-gnu" "/usr/lib/arm-linux-gnueabihf" "/usr/lib/mesa" "/usr/lib/mesa-egl"; do
+    if [ -d "$lib_path" ]; then
+        export LD_LIBRARY_PATH="$lib_path:$LD_LIBRARY_PATH"
+        if [ $DEBUG_MODE -eq 1 ]; then
+            echo "Added graphics library path: $lib_path"
+        fi
+    fi
+done
+
+# Add Portmaster runtime libraries if available
+if [ -d "$PORTMASTER_DIR/runtime/libs" ]; then
+    export LD_LIBRARY_PATH="$PORTMASTER_DIR/runtime/libs:$LD_LIBRARY_PATH"
+    echo "Added Portmaster runtime libraries to path"
+fi
+
+# Check for Mesa libraries
+MESA_PATHS=(
+    "/usr/lib/aarch64-linux-gnu/mesa"
+    "/usr/lib/arm-linux-gnueabihf/mesa"
+    "/usr/lib/mesa"
+    "/usr/lib/mesa-egl"
+)
+
+for path in "${MESA_PATHS[@]}"; do
+    if [ -d "$path" ]; then
+        export LD_LIBRARY_PATH="$path:$LD_LIBRARY_PATH"
+        if [ $DEBUG_MODE -eq 1 ]; then
+            echo "Found Mesa libraries at: $path"
+        fi
+    fi
+done
+
+if [ $DEBUG_MODE -eq 1 ]; then
+    echo "Final LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+fi
+
 # Launch Greenlight
 if [ "$DIRECT_X11" = "1" ]; then
     # Direct X11 mode (no Westonpack)
@@ -175,6 +302,7 @@ if [ "$DIRECT_X11" = "1" ]; then
     export GDK_BACKEND=x11
     export QT_QPA_PLATFORM=xcb
     export SDL_VIDEODRIVER=x11
+    export ELECTRON_DISABLE_GPU=1  # Try disabling GPU acceleration if there are issues
     
     # Add Greenlight binary directory to library path
     export LD_LIBRARY_PATH="$GREENLIGHT_DIR:$GREENLIGHT_DIR/lib:$LD_LIBRARY_PATH"
@@ -182,17 +310,18 @@ if [ "$DIRECT_X11" = "1" ]; then
     # Launch directly
     cd "$GREENLIGHT_DIR"
     if [ $DEBUG_MODE -eq 1 ]; then
-        ./greenlight --verbose
+        echo "Launching greenlight with verbose mode..."
+        ./greenlight --verbose --no-sandbox
     else
-        ./greenlight
+        ./greenlight --no-sandbox
     fi
 else
     # Westonpack mode
     if [ $DEBUG_MODE -eq 1 ]; then
         echo "Launching with runtime: $WESTONPACK_RUNTIME"
-        "$WESTONPACK_RUNTIME/start.sh" "$GREENLIGHT_DIR/greenlight" --verbose
+        "$WESTONPACK_RUNTIME/start.sh" "$GREENLIGHT_DIR/greenlight" --verbose --no-sandbox
     else
-        "$WESTONPACK_RUNTIME/start.sh" "$GREENLIGHT_DIR/greenlight"
+        "$WESTONPACK_RUNTIME/start.sh" "$GREENLIGHT_DIR/greenlight" --no-sandbox
     fi
 fi
 
