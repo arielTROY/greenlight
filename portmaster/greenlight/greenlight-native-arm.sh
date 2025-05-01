@@ -105,17 +105,44 @@ fi
 WESTONPACK_FOUND=0
 for path in "${WESTONPACK_PATHS[@]}"; do
     if [ -d "$path" ]; then
+        # Check for different possible Westonpack launcher scripts
         if [ -f "$path/start.sh" ]; then
             export WESTONPACK_RUNTIME="$path"
+            export WESTONPACK_LAUNCHER="$path/start.sh"
             WESTONPACK_FOUND=1
             if [ $DEBUG_MODE -eq 1 ]; then
-                echo "Found Westonpack at: $WESTONPACK_RUNTIME"
-                echo "Westonpack start.sh exists: $(ls -la $path/start.sh)"
+                echo "Found Westonpack at: $WESTONPACK_RUNTIME with start.sh"
+            fi
+            break
+        elif [ -f "$path/westonwrap.sh" ]; then
+            export WESTONPACK_RUNTIME="$path"
+            export WESTONPACK_LAUNCHER="$path/westonwrap.sh"
+            WESTONPACK_FOUND=1
+            if [ $DEBUG_MODE -eq 1 ]; then
+                echo "Found Westonpack at: $WESTONPACK_RUNTIME with westonwrap.sh"
+            fi
+            break
+        elif [ -f "$path/wp_weston" ] && [ -x "$path/wp_weston" ]; then
+            export WESTONPACK_RUNTIME="$path"
+            export WESTONPACK_LAUNCHER="$path/wp_weston"
+            WESTONPACK_FOUND=1
+            if [ $DEBUG_MODE -eq 1 ]; then
+                echo "Found Westonpack at: $WESTONPACK_RUNTIME with wp_weston"
+            fi
+            break
+        elif [ -f "$path/westonwrap32.sh" ]; then
+            export WESTONPACK_RUNTIME="$path"
+            export WESTONPACK_LAUNCHER="$path/westonwrap32.sh"
+            WESTONPACK_FOUND=1
+            if [ $DEBUG_MODE -eq 1 ]; then
+                echo "Found Westonpack at: $WESTONPACK_RUNTIME with westonwrap32.sh"
             fi
             break
         else
             if [ $DEBUG_MODE -eq 1 ]; then
-                echo "Found directory $path but no start.sh script"
+                echo "Found directory $path but no launcher script"
+                echo "Contents of $path:"
+                ls -la "$path"
             fi
         fi
     fi
@@ -128,11 +155,33 @@ if [ $WESTONPACK_FOUND -eq 0 ]; then
     
     # Try to find any X11 or Wayland runtime
     for runtime_dir in "$PORTMASTER_DIR/runtime/"* "/opt/system/Tools/PortMaster/runtime/"* "/roms/ports/runtime/"* "/storage/roms/ports/PortMaster/runtime/"*; do
-        if [ -d "$runtime_dir" ] && [ -f "$runtime_dir/start.sh" ]; then
-            export WESTONPACK_RUNTIME="$runtime_dir"
-            WESTONPACK_FOUND=1
-            echo "Found alternative runtime at: $WESTONPACK_RUNTIME"
-            break
+        if [ -d "$runtime_dir" ]; then
+            # Check for different possible launcher scripts
+            if [ -f "$runtime_dir/start.sh" ]; then
+                export WESTONPACK_RUNTIME="$runtime_dir"
+                export WESTONPACK_LAUNCHER="$runtime_dir/start.sh"
+                WESTONPACK_FOUND=1
+                echo "Found alternative runtime at: $WESTONPACK_RUNTIME with start.sh"
+                break
+            elif [ -f "$runtime_dir/westonwrap.sh" ]; then
+                export WESTONPACK_RUNTIME="$runtime_dir"
+                export WESTONPACK_LAUNCHER="$runtime_dir/westonwrap.sh"
+                WESTONPACK_FOUND=1
+                echo "Found alternative runtime at: $WESTONPACK_RUNTIME with westonwrap.sh"
+                break
+            elif [ -f "$runtime_dir/wp_weston" ] && [ -x "$runtime_dir/wp_weston" ]; then
+                export WESTONPACK_RUNTIME="$runtime_dir"
+                export WESTONPACK_LAUNCHER="$runtime_dir/wp_weston"
+                WESTONPACK_FOUND=1
+                echo "Found alternative runtime at: $WESTONPACK_RUNTIME with wp_weston"
+                break
+            elif [ -f "$runtime_dir/westonwrap32.sh" ]; then
+                export WESTONPACK_RUNTIME="$runtime_dir"
+                export WESTONPACK_LAUNCHER="$runtime_dir/westonwrap32.sh"
+                WESTONPACK_FOUND=1
+                echo "Found alternative runtime at: $WESTONPACK_RUNTIME with westonwrap32.sh"
+                break
+            fi
         fi
     done
     
@@ -318,10 +367,61 @@ if [ "$DIRECT_X11" = "1" ]; then
 else
     # Westonpack mode
     if [ $DEBUG_MODE -eq 1 ]; then
-        echo "Launching with runtime: $WESTONPACK_RUNTIME"
-        "$WESTONPACK_RUNTIME/start.sh" "$GREENLIGHT_DIR/greenlight" --verbose --no-sandbox
+        echo "Launching with runtime launcher: $WESTONPACK_LAUNCHER"
+        
+        # Check if the launcher script exists and is executable
+        if [ ! -f "$WESTONPACK_LAUNCHER" ]; then
+            echo "Error: Launcher script $WESTONPACK_LAUNCHER not found!"
+            echo "Contents of $WESTONPACK_RUNTIME:"
+            ls -la "$WESTONPACK_RUNTIME"
+            echo "Switching to direct X11 mode..."
+            
+            # Set up for direct X11 mode
+            export GDK_BACKEND=x11
+            export QT_QPA_PLATFORM=xcb
+            export SDL_VIDEODRIVER=x11
+            export ELECTRON_DISABLE_GPU=1
+            
+            # Launch directly
+            cd "$GREENLIGHT_DIR"
+            ./greenlight --verbose --no-sandbox
+        elif [ ! -x "$WESTONPACK_LAUNCHER" ]; then
+            echo "Error: Launcher script $WESTONPACK_LAUNCHER is not executable!"
+            echo "Making it executable..."
+            chmod +x "$WESTONPACK_LAUNCHER"
+            
+            # Try to launch with the now-executable script
+            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" --verbose --no-sandbox
+        else
+            # Launch with the detected launcher script
+            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" --verbose --no-sandbox
+        fi
     else
-        "$WESTONPACK_RUNTIME/start.sh" "$GREENLIGHT_DIR/greenlight" --no-sandbox
+        # Check if the launcher script exists and is executable
+        if [ ! -f "$WESTONPACK_LAUNCHER" ]; then
+            echo "Error: Launcher script $WESTONPACK_LAUNCHER not found!"
+            echo "Switching to direct X11 mode..."
+            
+            # Set up for direct X11 mode
+            export GDK_BACKEND=x11
+            export QT_QPA_PLATFORM=xcb
+            export SDL_VIDEODRIVER=x11
+            export ELECTRON_DISABLE_GPU=1
+            
+            # Launch directly
+            cd "$GREENLIGHT_DIR"
+            ./greenlight --no-sandbox
+        elif [ ! -x "$WESTONPACK_LAUNCHER" ]; then
+            echo "Error: Launcher script $WESTONPACK_LAUNCHER is not executable!"
+            echo "Making it executable..."
+            chmod +x "$WESTONPACK_LAUNCHER"
+            
+            # Try to launch with the now-executable script
+            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" --no-sandbox
+        else
+            # Launch with the detected launcher script
+            "$WESTONPACK_LAUNCHER" "$GREENLIGHT_DIR/greenlight" --no-sandbox
+        fi
     fi
 fi
 

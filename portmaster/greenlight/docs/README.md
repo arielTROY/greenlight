@@ -8,6 +8,7 @@ This directory contains documentation for the Greenlight port for Portmaster.
 - **ARM_BUILD_GUIDE.md**: Guide for building Greenlight for ARM from source
 - **DEBUG_LOGS.md**: Guide for accessing and interpreting debug logs
 - **WESTONPACK_INSTALLATION.md**: Guide for installing the Westonpack runtime
+- **WESTONPACK_TROUBLESHOOTING.md**: Solutions for Westonpack runtime issues
 - **R36S_TROUBLESHOOTING.md**: Solutions for common issues on R36S devices
 - **BINARY_INSTALLATION.md**: Guide for installing the Greenlight binary
 - **BOX86_BOX64_INSTALLATION.md**: Guide for installing Box86/Box64 on ARM devices
