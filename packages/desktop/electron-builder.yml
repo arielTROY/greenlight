@@ -54,6 +54,14 @@ linux:
     # - "flatpak"
     - "deb"
     # - "pacman"
+  # Enable ARM64 builds
+  executableName: greenlight
+  artifactName: "${productName}-${version}-${arch}.${ext}"
+
+# ARM64 specific configuration
+deb:
+  fpm: ["--architecture=arm64"]
+  depends: ["libgtk-3-0", "libnotify4", "libnss3", "libxss1", "libxtst6", "xdg-utils", "libatspi2.0-0", "libuuid1", "libsecret-1-0"]
 
 # flatpak:
 #   runtime: org.freedesktop.Platform

@@ -4,15 +4,19 @@
   "items": [
     "greenlight/",
     "greenlight/greenlight.sh",
+    "greenlight/greenlight-alt.sh",
+    "greenlight/greenlight-arm.sh",
+    "greenlight/greenlight-native-arm.sh",
     "greenlight/greenlight.gptk",
     "greenlight/greenlight-bin",
-    "greenlight/libs/"
+    "greenlight/libs/",
+    "greenlight/docs/"
   ],
   "items_opt": [],
   "attr": {
     "title": "Greenlight",
     "desc": "Open-source client for Xbox Cloud Gaming (xCloud) and Xbox home streaming",
-    "inst": "Download the latest release of Greenlight from https://github.com/unknownskl/greenlight/releases and extract the Linux x64 version. Copy the extracted files to the greenlight-bin directory. Requires Westonpack runtime.",
+    "inst": "For x86_64 devices: Download the latest release of Greenlight from https://github.com/unknownskl/greenlight/releases and extract the Linux x64 version. Copy the extracted files to the greenlight-bin directory. For ARM devices: Build Greenlight for ARM using the build-arm.sh script or extract the ARM binary following the instructions in docs/ARM_BINARY_INSTALLATION.md. Requires Westonpack runtime.",
     "genres": [
       "streaming"
     ],
@@ -22,6 +26,7 @@
     "image": "greenlight.jpg",
     "rtr": true,
     "runtime": "westonpack",
-    "reqs": []
+    "reqs": [],
+    "arch": ["x86_64", "arm64"]
   }
 }
