@@ -11,6 +11,7 @@ This directory contains documentation for the Greenlight port for Portmaster.
 - **R36S_TROUBLESHOOTING.md**: Solutions for common issues on R36S devices
 - **BINARY_INSTALLATION.md**: Guide for installing the Greenlight binary
 - **BOX86_BOX64_INSTALLATION.md**: Guide for installing Box86/Box64 on ARM devices
+- **GBM_TROUBLESHOOTING.md**: Solutions for GBM library issues on ARM devices
 
 ## Launch Scripts
 
