@@ -6,7 +6,7 @@
 
 # Enable debugging
 DEBUG_MODE=1  # Set to 0 to disable debugging
-DEBUG_LOG="/storage/roms/greenlight_debug.log"  # Save to SD card for easy access
+DEBUG_LOG="/tmp/greenlight_debug.log"  # Save to /tmp for easy access
 
 if [ $DEBUG_MODE -eq 1 ]; then
     rm -f "$DEBUG_LOG"  # Clear previous log
@@ -165,8 +165,8 @@ if [ $DEBUG_MODE -eq 1 ]; then
     # Enable Box86/Box64 logging for debugging
     export BOX86_LOG=1
     export BOX64_LOG=1
-    export BOX86_LOG_FILE="$DEBUG_LOG.box86"
-    export BOX64_LOG_FILE="$DEBUG_LOG.box64"
+    export BOX86_LOG_FILE="/tmp/greenlight_box86.log"
+    export BOX64_LOG_FILE="/tmp/greenlight_box64.log"
 fi
 
 # Add Greenlight binary directory to library path
